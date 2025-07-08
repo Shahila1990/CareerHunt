@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    font-family: 'League Spartan', sans-serif;
+    background-color: hsl(180, 52%, 96%);
+  }
