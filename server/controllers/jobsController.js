@@ -5,7 +5,7 @@ const Job = require('../models/jobModels');
 //@route GET/api/jobs
 //@access Public
 const getJobs = asyncHandler(async (req, res) => {
-  const jobs = await Job.find().sort({ createdAt: -1 });
+  const jobs = await Job.find().sort({ postedDate: -1 });
   res.status(200).json(jobs);
 });
 

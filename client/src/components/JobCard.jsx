@@ -1,4 +1,5 @@
 // src/components/JobCard.jsx
+import { formatDistanceToNow } from 'date-fns';
 function JobCard({ job, onFilterClick }) {
   const tags = [
     job.role,
@@ -33,7 +34,8 @@ function JobCard({ job, onFilterClick }) {
           {job.position}
         </h2>
         <p className="text-darkGrayishCyan text-sm">
-          {job.postedAt} • {job.contract} • {job.location}
+          {formatDistanceToNow(new Date(job.postedDate), { addSuffix: true })} •{' '}
+          {job.contract} • {job.location}
         </p>
       </div>
 

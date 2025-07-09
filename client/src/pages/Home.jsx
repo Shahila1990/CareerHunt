@@ -1,25 +1,24 @@
 import { useEffect, useState } from 'react';
 import API from '../services/api';
-import jobData from '../data.json';
-import JobCard from '../components/JobCard';
+
 import FilterBar from '../components/FilterBar';
+import JobList from '../components/JobList';
 
 function Home() {
   const [jobs, setJobs] = useState([]);
   const [filters, setFilters] = useState([]);
 
   useEffect(() => {
-    setJobs(jobData);
-    // const loadJobs = async () => {
-    //   try {
-    //     const response = await API.get('/jobs');
-    //     setJobs(response.data);
-    //   } catch (err) {
-    //     console.error('Failed to fetch jobs:', err.message);
-    //   }
-    // };
+    const loadJobs = async () => {
+      try {
+        const response = await API.get('/jobs');
+        setJobs(response.data);
+      } catch (err) {
+        console.error('Failed to fetch jobs:', err.message);
+      }
+    };
 
-    // loadJobs();
+    loadJobs();
   }, []);
 
   const handleFilterAdd = (tag) => {
@@ -63,15 +62,7 @@ function Home() {
         </div>
       )}
       <div className="max-w-6xl mx-auto px-4 pt-16 pb-12">
-        <div className="space-y-6">
-          {filteredJobs.map((job) => (
-            <JobCard
-              key={job._id || job.id}
-              job={job}
-              onFilterClick={handleFilterAdd}
-            />
-          ))}
-        </div>
+        <JobList jobs={filteredJobs} onFilterClick={handleFilterAdd} />
       </div>
     </>
   );
