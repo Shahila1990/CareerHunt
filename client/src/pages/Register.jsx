@@ -1,5 +1,5 @@
 import AuthForm from '../components/AuthForm';
-import useAuth from '../context/useAuth';
+import {useAuth} from '../context/useAuth';
 import { useNavigate } from 'react-router-dom';
 
 const Register = () => {

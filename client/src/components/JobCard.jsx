@@ -1,6 +1,19 @@
 // src/components/JobCard.jsx
 import { formatDistanceToNow } from 'date-fns';
+import { useAuth } from '../context/useAuth'; // your custom hook
+import API from '../services/Api';
 function JobCard({ job, onFilterClick }) {
+  const { user } = useAuth();
+
+  const handleSave = async () => {
+    try {
+      await API.post(`/user/save/${job._id}`);
+      alert('Job saved!');
+    } catch (err) {
+      console.error('Failed to save job', err);
+    }
+  };
+
   const tags = [
     job.role,
     job.level,
@@ -49,6 +62,14 @@ function JobCard({ job, onFilterClick }) {
             {tag}
           </button>
         ))}
+        {user && (
+          <button
+            onClick={handleSave}
+            className="ml-2 px-2 py-1 bg-desaturatedDarkCyan text-white rounded text-sm hover:bg-cyan-900 transition"
+          >
+            Save
+          </button>
+        )}
       </div>
     </div>
   );

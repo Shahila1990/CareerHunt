@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import API from '../services/api';
+import API from '../services/Api';
 
 import FilterBar from '../components/FilterBar';
 import JobList from '../components/JobList';
