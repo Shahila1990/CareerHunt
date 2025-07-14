@@ -51,7 +51,7 @@ function Home() {
   return (
     <>
       {filters.length > 0 && (
-        <div className="relative z-10 max-w-6xl mx-auto px-4">
+        <div className="relative z-20 -mt-12 max-w-6xl mx-auto px-4">
           <div className="-mt-12">
             <FilterBar
               filters={filters}
@@ -61,7 +61,7 @@ function Home() {
           </div>
         </div>
       )}
-      <div className="max-w-6xl mx-auto px-4 pt-16 pb-12">
+      <div className="max-w-6xl mx-auto px-4 pt-12 pb-12">
         <JobList jobs={filteredJobs} onFilterClick={handleFilterAdd} />
       </div>
     </>

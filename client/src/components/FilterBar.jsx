@@ -1,7 +1,7 @@
 // src/components/FilterBar.jsx
 function FilterBar({ filters, onRemove, onClear }) {
   return (
-    <div className="bg-white shadow-lg rounded px-6 py-4 flex flex-wrap justify-between items-center">
+    <div className="relative z-10 bg-white shadow-md -mt-8 mb-6 rounded px-6 py-4 flex flex-col md:flex-row md:justify-between md:items-center gap-4">
       <div className="flex flex-wrap gap-4">
         {filters.map((filter) => (
           <div
@@ -20,14 +20,16 @@ function FilterBar({ filters, onRemove, onClear }) {
           </div>
         ))}
       </div>
+
       <button
         onClick={onClear}
-        className="text-desaturatedDarkCyan font-semibold hover:underline mt-4 md:mt-0"
+        className="text-desaturatedDarkCyan font-semibold hover:underline self-end md:self-auto"
       >
         Clear
       </button>
     </div>
   );
 }
+
 
 export default FilterBar;

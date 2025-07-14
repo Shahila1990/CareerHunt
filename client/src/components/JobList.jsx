@@ -6,7 +6,7 @@ const JobList = ({ jobs, onFilterClick }) => {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-10">
       {jobs.map((job) => (
         <JobCard
           key={job._id || job.id}

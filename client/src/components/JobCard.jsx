@@ -1,16 +1,37 @@
 // src/components/JobCard.jsx
+import { useState, useEffect } from 'react';
 import { formatDistanceToNow } from 'date-fns';
-import { useAuth } from '../context/useAuth'; // your custom hook
+import { useAuth } from '../context/useAuth';
 import API from '../services/Api';
-function JobCard({ job, onFilterClick }) {
-  const { user } = useAuth();
+
+function JobCard({ job, onFilterClick, isSavedPage = false, onRemove }) {
+  const { user, refreshSavedJobs } = useAuth();
+  const [saved, setSaved] = useState(false);
+
+  useEffect(() => {
+    if (!user || !user.savedJobs) return;
+    setSaved(user.savedJobs.includes(job._id));
+  }, [user, job._id]);
 
   const handleSave = async () => {
     try {
       await API.post(`/user/save/${job._id}`);
+      setSaved(true);
+      await refreshSavedJobs();
       alert('Job saved!');
     } catch (err) {
       console.error('Failed to save job', err);
+    }
+  };
+
+  const handleUnsave = async () => {
+    try {
+      await API.delete(`/user/save/${job._id}`);
+      alert('Job removed!');
+      await refreshSavedJobs();
+      if (onRemove) onRemove(); // Refresh saved job list
+    } catch (err) {
+      console.error('Failed to unsave job', err);
     }
   };
 
@@ -23,14 +44,18 @@ function JobCard({ job, onFilterClick }) {
 
   return (
     <div
-      className={`bg-white p-6 rounded shadow-md border-l-4 ${
+      className={`relative bg-white pt-10 pb-6 px-6 rounded shadow-md border-l-4 ${
         job.featured ? 'border-desaturatedDarkCyan' : 'border-transparent'
-      } flex flex-col md:flex-row md:items-center`}
+      } flex flex-col md:flex-row md:items-center gap-y-4`}
     >
-      <img src={job.logo} alt={job.company} className="w-16 h-16 md:mr-6" />
+      {/* Logo (positioned half outside on mobile) */}
+      <div className="absolute -top-6 left-6 w-12 h-12 md:static md:w-16 md:h-16 md:mr-6">
+        <img src={job.logo} alt={job.company} className="w-full h-full object-contain" />
+      </div>
 
-      <div className="flex-1 mt-4 md:mt-0">
-        <div className="flex items-center gap-4 mb-1">
+      {/* Main job content */}
+      <div className="flex-1 mt-2 md:mt-0">
+        <div className="flex flex-wrap items-center gap-2 mb-2">
           <h3 className="font-bold text-desaturatedDarkCyan">{job.company}</h3>
           {job.new && (
             <span className="text-xs bg-desaturatedDarkCyan text-lightGrayishCyanFilter px-2 py-1 rounded-full uppercase">
@@ -46,13 +71,17 @@ function JobCard({ job, onFilterClick }) {
         <h2 className="text-lg font-semibold text-veryDarkGrayishCyan hover:text-desaturatedDarkCyan">
           {job.position}
         </h2>
-        <p className="text-darkGrayishCyan text-sm">
+        <p className="text-darkGrayishCyan text-sm mt-1">
           {formatDistanceToNow(new Date(job.postedDate), { addSuffix: true })} •{' '}
           {job.contract} • {job.location}
         </p>
       </div>
 
-      <div className="flex flex-wrap gap-2 mt-4 md:mt-0 md:ml-auto">
+      {/* Divider line on mobile */}
+      <hr className="my-4 border-gray-200 md:hidden w-full" />
+
+      {/* Tags and Save/Remove */}
+      <div className="flex flex-wrap items-center gap-2 md:ml-auto">
         {tags.map((tag) => (
           <button
             key={tag}
@@ -62,17 +91,34 @@ function JobCard({ job, onFilterClick }) {
             {tag}
           </button>
         ))}
-        {user && (
-          <button
-            onClick={handleSave}
-            className="ml-2 px-2 py-1 bg-desaturatedDarkCyan text-white rounded text-sm hover:bg-cyan-900 transition"
-          >
-            Save
-          </button>
+        {!user?.isAdmin && (
+          <div className="w-full md:w-auto">
+            {isSavedPage ? (
+              <button
+                onClick={handleUnsave}
+                className="md:w-auto text-sm px-3 py-1 rounded bg-red-500 text-white hover:bg-red-600"
+              >
+                Remove
+              </button>
+            ) : (
+              <button
+                onClick={handleSave}
+                disabled={saved}
+                className={`md:w-auto text-sm px-3 py-1 rounded ${
+                  saved
+                    ? 'bg-gray-300 text-gray-600 cursor-not-allowed'
+                    : 'bg-teal-500 text-white hover:bg-teal-600'
+                }`}
+              >
+                {saved ? 'Saved' : 'Save Job'}
+              </button>
+            )}
+          </div>
         )}
       </div>
     </div>
   );
+  
 }
 
 export default JobCard;

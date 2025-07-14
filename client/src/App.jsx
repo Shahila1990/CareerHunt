@@ -1,6 +1,7 @@
 // src/App.jsx
 import { Routes, Route } from 'react-router-dom';
 import NavBar from './components/NavBar'
+import Header from './components/Header';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Home from './pages/Home';
@@ -10,10 +11,10 @@ import SavedJobs from './pages/SavedJobs';
 function App() {
   return (
     <div className="bg-lightGrayishCyan min-h-screen font-spartan">
-      <header className="bg-desaturatedDarkCyan h-40 bg-[url('/images/bg-header-desktop.svg')] bg-no-repeat bg-cover md:h-44" />
-      <main className="relative -mt-8 px-4 max-w-6xl mx-auto">
-        <NavBar />
+      <NavBar />
+      <Header />
 
+      <main className="relative -mt-8 px-4 max-w-6xl mx-auto">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/register" element={<Register />} />
