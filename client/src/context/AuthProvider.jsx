@@ -56,21 +56,31 @@ export const AuthProvider = ({ children }) => {
     fetchUserAndSavedJobs();
   }, []);
 
-  const login = async (userData) => {
-    const savedRes = await API.get('/user/saved', {
-      headers: {
-        Authorization: `Bearer ${userData.token}`,
-      },
-    });
+  const login = async (formData) => {
+    try {
+      const res = await API.post('/auth/login', formData); // Call backend
+      const userData = res.data;
 
-    const updatedUser = {
-      ...userData,
-      savedJobs: savedRes.data.map((job) => job._id),
-    };
+      const savedRes = await API.get('/user/saved', {
+        headers: {
+          Authorization: `Bearer ${userData.token}`,
+        },
+      });
 
-    localStorage.setItem('user', JSON.stringify(updatedUser));
-    setUser(updatedUser);
+      const updatedUser = {
+        ...userData,
+        savedJobs: savedRes.data.map((job) => job._id),
+      };
+
+      localStorage.setItem('token', userData.token);
+      localStorage.setItem('user', JSON.stringify(updatedUser));
+      setUser(updatedUser);
+    } catch (err) {
+      console.error('Login failed:', err);
+      alert('Login failed. Please check your credentials.');
+    }
   };
+
 
   const register = async (formData) => {
     const res = await API.post('/auth/register', formData);

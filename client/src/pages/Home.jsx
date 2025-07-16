@@ -7,6 +7,7 @@ import JobList from '../components/JobList';
 function Home() {
   const [jobs, setJobs] = useState([]);
   const [filters, setFilters] = useState([]);
+  
 
   useEffect(() => {
     const loadJobs = async () => {

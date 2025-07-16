@@ -53,19 +53,28 @@ const NavBar = () => {
           </>
         )}
 
-        {user && !user.isAdmin && (
+        {/* {user && !user.isAdmin && (
           <Link
             to="/saved"
             className="text-desaturatedDarkCyan font-medium hover:underline"
           >
             Saved Jobs
           </Link>
+        )} */}
+
+        {user && (
+          <Link
+            to="/profile"
+            className="text-desaturatedDarkCyan font-medium hover:underline"
+          >
+            My Profile
+          </Link>
         )}
 
         {user?.isAdmin && (
           <Link
             to="/admin"
-            className="veryDarkGrayishCyan font-semibold hover:underline"
+            className="text-veryDarkGrayishCyan font-semibold hover:underline"
           >
             Admin Dashboard
           </Link>
@@ -74,7 +83,7 @@ const NavBar = () => {
         {user && (
           <button
             onClick={handleLogout}
-            className="text-gray-600 font-medium hover:underline"
+            className="text-desaturatedDarkCyan font-medium hover:underline"
           >
             Logout
           </button>
@@ -103,13 +112,19 @@ const NavBar = () => {
             </>
           )}
 
-          {user && !user.isAdmin && (
+          {/* {user && !user.isAdmin && (
             <Link
               to="/saved"
               onClick={toggleMenu}
               className="text-desaturatedDarkCyan font-medium hover:underline"
             >
               Saved Jobs
+            </Link>
+          )} */}
+
+          {user && (
+            <Link to="/profile" className="text-sm">
+              My Profile
             </Link>
           )}
 
@@ -129,7 +144,7 @@ const NavBar = () => {
                 toggleMenu();
                 handleLogout();
               }}
-              className="text-gray-600 font-medium hover:underline"
+              className="text-desaturatedDarkCyan font-medium hover:underline"
             >
               Logout
             </button>

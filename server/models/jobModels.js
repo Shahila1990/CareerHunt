@@ -4,7 +4,6 @@ const jobSchema = new mongoose.Schema(
   {
     company: { type: String, required: [true, 'Please Add company name'] },
     logo: { type: String }, // URL to logo image
-    new: { type: Boolean, default: false },
     featured: { type: Boolean, default: false },
     position: { type: String, required: [true, 'Please Add the position'] },
     role: { type: String },

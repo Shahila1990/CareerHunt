@@ -7,6 +7,7 @@ import API from '../services/Api';
 function JobCard({ job, onFilterClick, isSavedPage = false, onRemove }) {
   const { user, refreshSavedJobs } = useAuth();
   const [saved, setSaved] = useState(false);
+  const isNew = new Date() - new Date(job.postedDate) < 5 * 24 * 60 * 60 * 1000;
 
   useEffect(() => {
     if (!user || !user.savedJobs) return;
@@ -50,14 +51,18 @@ function JobCard({ job, onFilterClick, isSavedPage = false, onRemove }) {
     >
       {/* Logo (positioned half outside on mobile) */}
       <div className="absolute -top-6 left-6 w-12 h-12 md:static md:w-16 md:h-16 md:mr-6">
-        <img src={job.logo} alt={job.company} className="w-full h-full object-contain" />
+        <img
+          src={job.logo}
+          alt={job.company}
+          className="w-full h-full object-contain"
+        />
       </div>
 
       {/* Main job content */}
       <div className="flex-1 mt-2 md:mt-0">
         <div className="flex flex-wrap items-center gap-2 mb-2">
           <h3 className="font-bold text-desaturatedDarkCyan">{job.company}</h3>
-          {job.new && (
+          {isNew && (
             <span className="text-xs bg-desaturatedDarkCyan text-lightGrayishCyanFilter px-2 py-1 rounded-full uppercase">
               New!
             </span>

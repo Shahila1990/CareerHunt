@@ -35,8 +35,55 @@ const getSavedJobs = asyncHandler(async (req, res) => {
   res.json(user.savedJobs);
 });
 
+// @desc    Get current user's profile
+// @route   GET /api/users/profile
+// @access  Private
+const getUserProfile = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id).select('-password').populate('savedJobs');
+  if (!user) {
+    res.status(404);
+    throw new Error('User not found');
+  }
+  res.json(user);
+});
+
+const updateUserProfile = asyncHandler(async (req, res) => {
+  const { name, currentPassword, newPassword } = req.body;
+
+  const user = await User.findById(req.user._id);
+  if (!user) {
+    res.status(404);
+    throw new Error('User not found');
+  }
+
+  if (name) user.name = name;
+  
+
+  // Handle password update
+  if (currentPassword && newPassword) {
+    const isMatch = await user.matchPassword(currentPassword);
+    if (!isMatch) {
+      res.status(400);
+      throw new Error('Current password is incorrect');
+    }
+    user.password = newPassword; 
+    
+  }
+
+  const updatedUser = await user.save();
+  res.json({
+    _id: updatedUser._id,
+    name: updatedUser.name,
+    email: updatedUser.email,
+    
+   
+  });
+});
+
 module.exports = {
   saveJob,
   unsaveJob,
   getSavedJobs,
+  getUserProfile,
+  updateUserProfile,
 };
