@@ -22,7 +22,21 @@ function JobCard({ job, onFilterClick, isSavedPage = false, onRemove }) {
       await refreshSavedJobs();
       toast.success('Job saved successfully!');
     } catch (err) {
-      console.error('Failed to save job', err);
+      if (err.response) {
+        const status = err.response.status;
+
+        if (status === 401) {
+          toast.error('Unauthorized. Please log in.');
+        } else if (status === 409) {
+          toast.error('Job already saved.');
+        } else if (status === 500) {
+          toast.error('Server error. Try again later.');
+        } else {
+          toast.error(err.response.data?.message || 'Failed to save job.');
+        }
+      } else {
+        toast.error('Network error. Please check your connection.');
+      }
     }
   };
 
@@ -33,7 +47,21 @@ function JobCard({ job, onFilterClick, isSavedPage = false, onRemove }) {
       await refreshSavedJobs();
       if (onRemove) onRemove(); // Refresh saved job list
     } catch (err) {
-      console.error('Failed to unsave job', err);
+      if (err.response) {
+        const status = err.response.status;
+
+        if (status === 401) {
+          toast.error('Unauthorized. Please log in again.');
+        } else if (status === 404) {
+          toast.error('Job not found.');
+        } else if (status === 500) {
+          toast.error('Server error. Please try later.');
+        } else {
+          toast.error(err.response.data?.message || 'Something went wrong.');
+        }
+      } else {
+        toast.error('Network error. Please check your connection.');
+      }
     }
   };
 

@@ -13,8 +13,21 @@ const Login = () => {
       await login(formData);
       navigate('/'); 
     } catch (err) {
-      console.error('Login failed:', err);
-      toast.error('Invalid User.');
+      if (err.response) {
+        const status = err.response.status;
+
+        if (status === 401) {
+          toast.error('Invalid credentials.');
+        } else if (status === 403) {
+          toast.error('Access denied.');
+        } else if (status === 500) {
+          toast.error('Server error. Please try again later.');
+        } else {
+          toast.error(err.response.data?.message || 'Login failed.');
+        }
+      } else {
+        toast.error('Network error. Please check your connection.');
+      }
     }
   };
 
