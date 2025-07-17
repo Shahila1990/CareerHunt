@@ -7,6 +7,7 @@ const defaultForm = {
   position: '',
   role: '',
   level: '',
+  featured: false,
   postedAt: '',
   postedDate: '',
   contract: '',
@@ -58,7 +59,7 @@ const JobForm = ({ job, onCancel, onSuccess }) => {
       }
       onSuccess();
     } catch (err) {
-      alert('Failed to save job');
+      toast.error('Something went wrong. Failed to save Job');
       console.error(err);
     }
   };
@@ -114,6 +115,7 @@ const JobForm = ({ job, onCancel, onSuccess }) => {
           onChange={handleChange}
           placeholder="Posted Date"
         />
+
         <input
           name="contract"
           value={form.contract}
@@ -138,6 +140,19 @@ const JobForm = ({ job, onCancel, onSuccess }) => {
           onChange={(e) => handleArrayChange(e, 'tools')}
           placeholder="Tools (comma-separated)"
         />
+        <div className="md:col-span-2 flex items-center space-x-2">
+          <input
+            type="checkbox"
+            id="featured"
+            checked={form.featured}
+            onChange={(e) =>
+              setForm((prev) => ({ ...prev, featured: e.target.checked }))
+            }
+          />
+          <label htmlFor="featured" className="font-medium text-sm">
+            Mark as Featured
+          </label>
+        </div>
       </div>
       <div className="flex justify-end space-x-2">
         {job && (

@@ -1,13 +1,15 @@
 // src/App.jsx
 import { Routes, Route, Navigate } from 'react-router-dom';
-import NavBar from './components/NavBar'
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import NavBar from './components/NavBar';
 import Header from './components/Header';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Home from './pages/Home';
-import AdminDashboard from './pages/AdminDashboard'; 
+import AdminDashboard from './pages/AdminDashboard';
 import SavedJobs from './pages/SavedJobs';
-import UserDashboard from './pages/UserDashboard'; 
+import UserDashboard from './pages/UserDashboard';
 
 function App() {
   return (
@@ -28,6 +30,17 @@ function App() {
             element={<Navigate to="/dashboard" replace />}
           />
         </Routes>
+
+        <ToastContainer
+          position="top-right"
+          autoClose={3000} // in ms
+          hideProgressBar={false}
+          newestOnTop
+          closeOnClick
+          pauseOnHover
+          draggable
+          theme="light"
+        />
       </main>
     </div>
   );

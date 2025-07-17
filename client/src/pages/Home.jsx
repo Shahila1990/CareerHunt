@@ -7,20 +7,26 @@ import JobList from '../components/JobList';
 function Home() {
   const [jobs, setJobs] = useState([]);
   const [filters, setFilters] = useState([]);
-  
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [loading, setLoading] = useState(false);
+
+  const loadJobs = async () => {
+    setLoading(true);
+    try {
+      const res = await API.get(`/jobs?page=${page}&limit=5`);
+      setJobs(res.data.jobs); 
+      setTotalPages(res.data.totalPages);
+    } catch (err) {
+      console.error('Failed to fetch jobs:', err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const loadJobs = async () => {
-      try {
-        const response = await API.get('/jobs');
-        setJobs(response.data);
-      } catch (err) {
-        console.error('Failed to fetch jobs:', err.message);
-      }
-    };
-
     loadJobs();
-  }, []);
+  }, [page]);
 
   const handleFilterAdd = (tag) => {
     if (!filters.includes(tag)) {
@@ -49,6 +55,12 @@ function Home() {
       )
     : jobs;
 
+  const handlePageChange = (newPage) => {
+    if (newPage >= 1 && newPage <= totalPages) {
+      setPage(newPage);
+    }
+  };
+
   return (
     <>
       {filters.length > 0 && (
@@ -62,8 +74,31 @@ function Home() {
           </div>
         </div>
       )}
+
       <div className="max-w-6xl mx-auto px-4 pt-12 pb-12">
-        <JobList jobs={filteredJobs} onFilterClick={handleFilterAdd} />
+        {loading ? (
+          <p className="text-center text-darkGrayishCyan">Loading jobs...</p>
+        ) : (
+          <>
+            <JobList jobs={filteredJobs} onFilterClick={handleFilterAdd} />
+            {/* Pagination Controls */}
+            <div className="flex justify-center mt-10 gap-2 flex-wrap">
+              {[...Array(totalPages)].map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => handlePageChange(i + 1)}
+                  className={`px-4 py-2 rounded ${
+                    page === i + 1
+                      ? 'bg-teal-600 text-white'
+                      : 'bg-white border text-gray-600'
+                  }`}
+                >
+                  {i + 1}
+                </button>
+              ))}
+            </div>
+          </>
+        )}
       </div>
     </>
   );

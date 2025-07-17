@@ -1,3 +1,5 @@
+import { toast } from 'react-toastify';
+
 const AdminJobCard = ({ job, onEdit, onDelete }) => {
   const handleDelete = async () => {
     if (window.confirm('Are you sure you want to delete this job?')) {
@@ -10,7 +12,7 @@ const AdminJobCard = ({ job, onEdit, onDelete }) => {
         });
         onDelete();
       } catch (err) {
-        alert('Failed to delete job');
+        toast.error('Something went wrong. Failed to delete Job');
         console.error(err);
       }
     }

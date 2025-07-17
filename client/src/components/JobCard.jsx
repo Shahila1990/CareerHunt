@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { formatDistanceToNow } from 'date-fns';
 import { useAuth } from '../context/useAuth';
 import API from '../services/Api';
+import { toast } from 'react-toastify';
 
 function JobCard({ job, onFilterClick, isSavedPage = false, onRemove }) {
   const { user, refreshSavedJobs } = useAuth();
@@ -19,7 +20,7 @@ function JobCard({ job, onFilterClick, isSavedPage = false, onRemove }) {
       await API.post(`/user/save/${job._id}`);
       setSaved(true);
       await refreshSavedJobs();
-      alert('Job saved!');
+      toast.success('Job saved successfully!');
     } catch (err) {
       console.error('Failed to save job', err);
     }
@@ -28,7 +29,7 @@ function JobCard({ job, onFilterClick, isSavedPage = false, onRemove }) {
   const handleUnsave = async () => {
     try {
       await API.delete(`/user/save/${job._id}`);
-      alert('Job removed!');
+      toast.success('Job Removed successfully!');
       await refreshSavedJobs();
       if (onRemove) onRemove(); // Refresh saved job list
     } catch (err) {
@@ -54,7 +55,7 @@ function JobCard({ job, onFilterClick, isSavedPage = false, onRemove }) {
         <img
           src={job.logo}
           alt={job.company}
-          className="w-full h-full object-contain"
+          className="w-12 h-12 md:w-16 md:h-16 rounded-full object-cover border border-gray-200 mx-auto md:mx-0"
         />
       </div>
 

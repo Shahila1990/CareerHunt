@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import API from '../services/Api';
 import JobCard from './JobCard';
+import { toast } from 'react-toastify';
 
 function SavedJobsCard() {
   const [savedJobs, setSavedJobs] = useState([]);
@@ -11,6 +12,7 @@ function SavedJobsCard() {
       const res = await API.get('/user/saved');
       setSavedJobs(res.data);
     } catch (err) {
+      toast.error('Something went wrong. Failed to save Job');
       console.error('Failed to load saved jobs', err);
     }
   };
@@ -25,9 +27,9 @@ function SavedJobsCard() {
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
-      <h2 className="text-xl font-bold text-veryDarkGrayishCyan text-center mb-8">
+      <h1 className="text-xl font-bold text-veryDarkGrayishCyan text-center mb-8 sm:text-left">
         Saved Jobs
-      </h2>
+      </h1>
       <div className="space-y-10">
         {savedJobs.length > 0 ? (
           savedJobs.map((job) => (

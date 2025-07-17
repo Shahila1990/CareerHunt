@@ -1,6 +1,7 @@
 import AuthForm from '../components/AuthForm';
 import {useAuth} from '../context/useAuth';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const Register = () => {
   const { register } = useAuth();
@@ -12,7 +13,7 @@ const Register = () => {
       navigate('/');
     } catch (err) {
       console.error('Registration failed:', err);
-      alert('Register failed');
+      toast.error('Something went wrong. Registration failed');
     }
   };
 

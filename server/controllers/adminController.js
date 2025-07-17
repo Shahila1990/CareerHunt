@@ -28,4 +28,26 @@ const getAllUsers = asyncHandler(async (req, res) => {
   res.json(users);
 });
 
-module.exports = { getAdminSummary, getAllUsers, };
+//@desc   Get jobGrowth by role
+// @route GET /api/admin/job-growth
+// @access Private/Admin
+const getJobGrowth = asyncHandler(async (req, res) => {
+  const roleFilter = req.query.role;
+
+  const matchStage = roleFilter ? { role: roleFilter } : {};
+
+  const jobGrowth = await Job.aggregate([
+    { $match: matchStage },
+    {
+      $group: {
+        _id: { $substr: ['$postedDate', 0, 7] }, // 'YYYY-MM'
+        count: { $sum: 1 },
+      },
+    },
+    { $sort: { _id: 1 } },
+  ]);
+
+  res.json(jobGrowth);
+});
+
+module.exports = { getAdminSummary, getAllUsers, getJobGrowth ,};

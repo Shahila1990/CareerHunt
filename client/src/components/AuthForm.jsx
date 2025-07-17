@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import React from 'react';
 
 const AuthForm = ({ title, onSubmit }) => {
   const [form, setForm] = useState({ name: '', email: '', password: '' });

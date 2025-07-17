@@ -62,7 +62,7 @@ const NavBar = () => {
           </Link>
         )} */}
 
-        {user && (
+        {user && !user.isAdmin && (
           <Link
             to="/profile"
             className="text-desaturatedDarkCyan font-medium hover:underline"
@@ -122,7 +122,7 @@ const NavBar = () => {
             </Link>
           )} */}
 
-          {user && (
+          {user && !user.isAdmin && (
             <Link to="/profile" className="text-sm">
               My Profile
             </Link>

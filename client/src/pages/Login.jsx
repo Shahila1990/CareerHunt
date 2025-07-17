@@ -1,6 +1,8 @@
+import React from 'react';
 import AuthForm from '../components/AuthForm';
-import {useAuth} from '../context/useAuth';
+import { useAuth } from '../context/useAuth';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const Login = () => {
   const { login } = useAuth();
@@ -9,10 +11,10 @@ const Login = () => {
   const handleSubmit = async (formData) => {
     try {
       await login(formData);
-      navigate('/'); // or /dashboard if admin
+      navigate('/'); 
     } catch (err) {
       console.error('Login failed:', err);
-      alert('Invalid User');
+      toast.error('Invalid User.');
     }
   };
 

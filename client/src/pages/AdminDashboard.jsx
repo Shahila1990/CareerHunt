@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import API from '../services/Api';
 import AdminJobCard from '../components/AdminJobCard';
+import JobGrowthChart from '../components/JobGrowthChart';
 import JobForm from '../components/JobForm';
 import { useAuth } from '../context/useAuth';
 
@@ -18,7 +19,7 @@ const AdminDashboard = () => {
     setLoading(true);
     try {
       const res = await API.get('/jobs');
-      setJobs(res.data);
+      setJobs(res.data.jobs);
     } catch (err) {
       console.error('Error fetching jobs:', err.message);
     } finally {
@@ -68,10 +69,11 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="max-w-5xl mx-auto px-4 pt-6 space-y-6">
+    <div className="max-w-5xl mx-auto px-4 pt-6 space-y-8">
       <h1 className="text-2xl font-bold text-desaturatedDarkCyan">
         Admin Dashboard
       </h1>
+      <JobGrowthChart />
 
       {/* Tabs */}
       <div className="flex gap-4 border-b pb-2">
@@ -98,24 +100,22 @@ const AdminDashboard = () => {
       </div>
 
       {/* Overview Cards */}
-      {summary &&
-        activeTab ===
-          'jobs' && (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-white">
-              <div className="bg-desaturatedDarkCyan p-4 rounded shadow">
-                <h2 className="text-lg font-semibold">Total Jobs</h2>
-                <p className="text-2xl">{summary.totalJobs}</p>
-              </div>
-              <div className="bg-veryDarkGrayishCyan p-4 rounded shadow">
-                <h2 className="text-lg font-semibold">Total Users</h2>
-                <p className="text-2xl">{summary.totalUsers}</p>
-              </div>
-              <div className="bg-teal-600 p-4 rounded shadow">
-                <h2 className="text-lg font-semibold">New Jobs Today</h2>
-                <p className="text-2xl">{summary.newJobsToday}</p>
-              </div>
-            </div>
-          )}
+      {summary && activeTab === 'jobs' && (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-white">
+          <div className="bg-desaturatedDarkCyan p-4 rounded shadow">
+            <h2 className="text-lg font-semibold">Total Jobs</h2>
+            <p className="text-2xl">{summary.totalJobs}</p>
+          </div>
+          <div className="bg-veryDarkGrayishCyan p-4 rounded shadow">
+            <h2 className="text-lg font-semibold">Total Users</h2>
+            <p className="text-2xl">{summary.totalUsers}</p>
+          </div>
+          <div className="bg-teal-600 p-4 rounded shadow">
+            <h2 className="text-lg font-semibold">New Jobs Today</h2>
+            <p className="text-2xl">{summary.newJobsToday}</p>
+          </div>
+        </div>
+      )}
 
       {/* Job Management Tab */}
       {activeTab === 'jobs' && (

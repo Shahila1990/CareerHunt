@@ -1,6 +1,8 @@
 import JobCard from './JobCard';
 
 const JobList = ({ jobs, onFilterClick }) => {
+
+  
   if (jobs.length === 0) {
     return <p className="text-center text-darkGrayishCyan">No jobs found.</p>;
   }

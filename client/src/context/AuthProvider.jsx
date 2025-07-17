@@ -1,6 +1,8 @@
+import React from 'react';
 import { useState, useEffect } from 'react';
 import { AuthContext } from './AuthContext';
 import API from '../services/Api';
+import { toast } from 'react-toastify';
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(() => {
@@ -8,7 +10,6 @@ export const AuthProvider = ({ children }) => {
     return stored ? JSON.parse(stored) : null;
   });
 
-  
   const refreshSavedJobs = async () => {
     if (!user) return;
     try {
@@ -26,7 +27,6 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
- 
   useEffect(() => {
     const fetchUserAndSavedJobs = async () => {
       const storedUser = localStorage.getItem('user');
@@ -77,10 +77,9 @@ export const AuthProvider = ({ children }) => {
       setUser(updatedUser);
     } catch (err) {
       console.error('Login failed:', err);
-      alert('Login failed. Please check your credentials.');
+      toast.error('Login Failed. Please check your credential');
     }
   };
-
 
   const register = async (formData) => {
     const res = await API.post('/auth/register', formData);

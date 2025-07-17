@@ -5,8 +5,19 @@ const Job = require('../models/jobModels');
 //@route GET/api/jobs
 //@access Public
 const getJobs = asyncHandler(async (req, res) => {
-  const jobs = await Job.find().sort({ postedDate: -1 });
-  res.status(200).json(jobs);
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 5;
+  const skip = (page - 1) * limit;
+
+  const total = await Job.countDocuments();
+  const jobs = await Job.find()
+    .sort({ postedDate: -1 })
+    .skip(skip)
+    .limit(limit);
+  res.status(200).json({jobs,
+    page,
+    totalPages: Math.ceil(total / limit),
+    totalJobs: total,});
 });
 
 //@desc  get single job
@@ -48,7 +59,9 @@ const updateJob = asyncHandler(async (req, res) => {
     res.status(404);
     throw new Error('Job not found');
   }
-  const updatedJob = await Job.findByIdAndUpdate(req.params.id, req.body, { new: true });
+  const updatedJob = await Job.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+  });
 
   res.status(200).json(updatedJob);
 });
@@ -62,7 +75,8 @@ const deleteJob = asyncHandler(async (req, res) => {
     res.status(404);
     throw new Error('Job not found');
   }
-  res.status(200).json({ message: 'Job deleted successfully' });s
+  res.status(200).json({ message: 'Job deleted successfully' });
+  s;
 });
 
 module.exports = {

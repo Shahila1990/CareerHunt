@@ -1,3 +1,5 @@
+
+
 import js from '@eslint/js'
 import globals from 'globals'
 import reactHooks from 'eslint-plugin-react-hooks'
@@ -8,6 +10,12 @@ export default defineConfig([
   globalIgnores(['dist']),
   {
     files: ['**/*.{js,jsx}'],
+    env: {
+      browser: true,
+      node: true,
+      es2021: true,
+      jest: true, 
+    },
     extends: [
       js.configs.recommended,
       reactHooks.configs['recommended-latest'],
@@ -26,4 +34,4 @@ export default defineConfig([
       'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
     },
   },
-])
+]);
