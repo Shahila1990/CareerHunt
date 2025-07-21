@@ -80,6 +80,12 @@ const NavBar = () => {
           </Link>
         )}
 
+        {/* {user ? (
+          <Link to="/dashboard">My Profile</Link>
+        ) : (
+          <Link to="/login">Login</Link>
+        )} */}
+
         {user && (
           <button
             onClick={handleLogout}

@@ -12,14 +12,30 @@ const AdminDashboard = () => {
   const [editingJob, setEditingJob] = useState(null);
   const [loading, setLoading] = useState(true);
   const [summary, setSummary] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const usersPerPage = 5;
+  const [jobPage, setJobPage] = useState(1);
+  const jobsPerPage = 5;
+
 
   const { user } = useAuth();
+  const indexOfLastUser = currentPage * usersPerPage;
+  const indexOfFirstUser = indexOfLastUser - usersPerPage;
+  const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
+
+  const indexOfLastJob = jobPage * jobsPerPage;
+  const indexOfFirstJob = indexOfLastJob - jobsPerPage;
+  const currentJobs = jobs.slice(indexOfFirstJob, indexOfLastJob);
+
 
   const fetchJobs = async () => {
     setLoading(true);
     try {
-      const res = await API.get('/jobs');
+      const res = await API.get('/jobs?limit=1000');
+      console.log(jobs);
+      
       setJobs(res.data.jobs);
+      setJobPage(1);
     } catch (err) {
       console.error('Error fetching jobs:', err.message);
     } finally {
@@ -35,9 +51,11 @@ const AdminDashboard = () => {
         },
       });
       setUsers(res.data);
+      setCurrentPage(1)
     } catch (err) {
       console.error('Error fetching users:', err.message);
     }
+    
   };
 
   const fetchSummary = async () => {
@@ -137,7 +155,7 @@ const AdminDashboard = () => {
                 <p className="text-sm text-darkGrayishCyan">
                   Total Jobs: {jobs.length}
                 </p>
-                {jobs.map((job) => (
+                {currentJobs.map((job) => (
                   <AdminJobCard
                     key={job._id}
                     job={job}
@@ -145,6 +163,29 @@ const AdminDashboard = () => {
                     onDelete={handleRefresh}
                   />
                 ))}
+                <div className="flex justify-center mt-4 gap-2">
+                  <button
+                    onClick={() => setJobPage((prev) => Math.max(prev - 1, 1))}
+                    disabled={jobPage === 1}
+                    className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
+                  >
+                    Prev
+                  </button>
+                  <span className="text-sm text-gray-600 self-center">
+                    Page {jobPage} of {Math.ceil(jobs.length / jobsPerPage)}
+                  </span>
+                  <button
+                    onClick={() =>
+                      setJobPage((prev) =>
+                        jobPage * jobsPerPage < jobs.length ? prev + 1 : prev
+                      )
+                    }
+                    disabled={jobPage * jobsPerPage >= jobs.length}
+                    className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
+                  >
+                    Next
+                  </button>
+                </div>
               </>
             )}
           </div>
@@ -154,7 +195,7 @@ const AdminDashboard = () => {
       {/* User List Tab */}
       {activeTab === 'users' && (
         <div className="space-y-4">
-          {users.map((user) => (
+          {currentUsers.map((user) => (
             <div
               key={user._id}
               className="bg-white shadow p-4 rounded border flex justify-between items-center"
@@ -170,6 +211,29 @@ const AdminDashboard = () => {
               </p>
             </div>
           ))}
+          <div className="flex justify-center mt-4 gap-2">
+            <button
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+              className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
+            >
+              Prev
+            </button>
+            <span className="text-sm text-gray-600 self-center">
+              Page {currentPage} of {Math.ceil(users.length / usersPerPage)}
+            </span>
+            <button
+              onClick={() =>
+                setCurrentPage((prev) =>
+                  currentPage * usersPerPage < users.length ? prev + 1 : prev
+                )
+              }
+              disabled={currentPage * usersPerPage >= users.length}
+              className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
+            >
+              Next
+            </button>
+          </div>
         </div>
       )}
     </div>

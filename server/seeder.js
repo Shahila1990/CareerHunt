@@ -34,7 +34,7 @@ const importData = async () => {
     }));
 
     await Job.insertMany(enrichedData);
-    console.log('Data imported with postedDate!');
+    //console.log('Data imported with postedDate!');
     process.exit();
   } catch (error) {
     console.error('Seeding error:', error);

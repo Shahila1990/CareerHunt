@@ -10,8 +10,10 @@ import Home from './pages/Home';
 import AdminDashboard from './pages/AdminDashboard';
 import SavedJobs from './pages/SavedJobs';
 import UserDashboard from './pages/UserDashboard';
+import useAuthCheck from './context/useAuthCheck';
 
 function App() {
+  useAuthCheck()
   return (
     <div className="bg-lightGrayishCyan min-h-screen font-spartan">
       <NavBar />

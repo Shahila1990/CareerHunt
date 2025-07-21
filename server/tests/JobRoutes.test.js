@@ -14,7 +14,7 @@ afterAll(async () => {
 describe('GET /api/jobs', () => {
   it('should return jobs array', async () => {
     const res = await request(app).get('/api/jobs');
-    console.log(res.body);
+    //console.log(res.body);
     expect(res.statusCode).toBe(200);
     expect(Array.isArray(res.body.jobs)).toBe(true);
   }, 10000); 

@@ -3,12 +3,20 @@ import API from '../services/Api';
 import { useAuth } from '../context/useAuth';
 
 function ProfileCard({ onSuccess }) {
-  const { user, refreshSavedJobs } = useAuth();
+  const { user, refreshSavedJobs } = useAuth(); 
   const [name, setName] = useState(user?.name || '');
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [message, setMessage] = useState(null);
   const [showPasswordForm, setShowPasswordForm] = useState(false);
+
+  if (!user) {
+    return (
+      <p className="text-center text-gray-500">
+        Please log in to view this page.
+      </p>
+    );
+  }
 
   const handleUpdate = async (e) => {
     e.preventDefault();
@@ -23,7 +31,7 @@ function ProfileCard({ onSuccess }) {
       setMessage('Profile updated successfully!');
       setCurrentPassword('');
       setNewPassword('');
-      setShowPasswordForm(false); // hide form after update
+      setShowPasswordForm(false);
       await refreshSavedJobs();
       onSuccess?.();
     } catch (err) {

@@ -1,25 +1,34 @@
-// src/components/SavedJobsCard.jsx
 import { useEffect, useState } from 'react';
 import API from '../services/Api';
 import JobCard from './JobCard';
 import { toast } from 'react-toastify';
+import { useAuth } from '../context/useAuth';
 
 function SavedJobsCard() {
+  const { user } = useAuth(); 
   const [savedJobs, setSavedJobs] = useState([]);
 
-  const fetchSavedJobs = async () => {
-    try {
-      const res = await API.get('/user/saved');
-      setSavedJobs(res.data);
-    } catch (err) {
-      toast.error('Something went wrong. Failed to save Job');
-      console.error('Failed to load saved jobs', err);
-    }
-  };
-
   useEffect(() => {
+    if (!user) return;
+    const fetchSavedJobs = async () => {
+      try {
+        const res = await API.get('/user/saved');
+        setSavedJobs(res.data);
+      } catch (err) {
+        toast.error('Something went wrong. Failed to load saved jobs.');
+        console.error('Failed to load saved jobs', err);
+      }
+    };
     fetchSavedJobs();
-  }, []);
+  }, [user]);
+
+  if (!user) {
+    return (
+      <p className="text-center text-gray-500">
+        Please log in to view this page.
+      </p>
+    );
+  }
 
   const handleFilterClick = (tag) => {
     console.log('Tag clicked:', tag);
@@ -38,7 +47,9 @@ function SavedJobsCard() {
               job={job}
               onFilterClick={handleFilterClick}
               isSavedPage={true}
-              onRemove={fetchSavedJobs}
+              onRemove={() =>
+                setSavedJobs((prev) => prev.filter((j) => j._id !== job._id))
+              }
             />
           ))
         ) : (
