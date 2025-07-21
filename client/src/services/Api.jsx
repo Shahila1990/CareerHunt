@@ -4,6 +4,7 @@ import dayjs from 'dayjs';
 
 const API = axios.create({
   baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8000/api',
+  withCredentials: true
 });
 
 API.interceptors.request.use((config) => {
