@@ -4,12 +4,13 @@ CareerHunt is a full-stack MERN application that allows users to browse, filter,
 
 ## 🌐 Live Demo
 
-- Frontend: [https://your-frontend.vercel.app](https://your-frontend.vercel.app)
+- Frontend: [https://career-hunt-seven.vercel.app](https://career-hunt-seven.vercel.app)
 - Backend: [https://careerhunt-qbar.onrender.com/api](https://careerhunt-qbar.onrender.com/api)
 
 ## 📸 Features
 
 ### ✅ User Features:
+
 - Browse all job listings with pagination
 - Filter by role, level, tools, and languages
 - Save/unsave jobs to favorites
@@ -18,6 +19,7 @@ CareerHunt is a full-stack MERN application that allows users to browse, filter,
 - Auto logout on token expiry
 
 ### 🔐 Admin Features:
+
 - Admin login
 - Create, edit, delete jobs
 - View all registered users
@@ -26,6 +28,7 @@ CareerHunt is a full-stack MERN application that allows users to browse, filter,
 ## 🛠️ Tech Stack
 
 ### Frontend:
+
 - React + Vite
 - Tailwind CSS
 - React Router DOM
@@ -33,6 +36,7 @@ CareerHunt is a full-stack MERN application that allows users to browse, filter,
 - Context API for Auth and Global State
 
 ### Backend:
+
 - Node.js + Express.js
 - MongoDB + Mongoose
 - JWT + bcryptjs for authentication
